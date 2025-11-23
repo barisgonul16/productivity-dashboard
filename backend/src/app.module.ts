@@ -1,19 +1,27 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DATABASE_HOST || 'localhost',
-      port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT, 10) : 5432,
-      username: process.env.DATABASE_USERNAME || 'postgres',
-      password: process.env.DATABASE_PASSWORD || 'password',
-      database: process.env.DATABASE_NAME || 'productivity_db',
+      // Render'da DATABASE_URL varsa onu kullan, yoksa locale bak
+      url: process.env.DATABASE_URL, 
+      host: process.env.DATABASE_URL ? undefined : process.env.DATABASE_HOST || 'localhost',
+      port: process.env.DATABASE_URL ? undefined : parseInt(process.env.DATABASE_PORT) || 5432,
+      username: process.env.DATABASE_URL ? undefined : process.env.DATABASE_USERNAME || 'postgres',
+      password: process.env.DATABASE_URL ? undefined : process.env.DATABASE_PASSWORD || 'password',
+      database: process.env.DATABASE_URL ? undefined : process.env.DATABASE_NAME || 'productivity_db',
+      
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // Prod'da false yap
+      synchronize: true, // MVP olduğu için true bırakıyoruz (tabloları otomatik oluşturur)
+      
+      // ÖNEMLİ: Render için SSL ayarı
+      ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
     }),
   ],
   controllers: [AppController],
