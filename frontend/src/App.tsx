@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import { api } from './services/api';
+import { useState } from 'react'
+import { api } from './services/api'
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('')
 
   const testBackend = async () => {
     try {
-      const res = await api.get('/');
-      setMessage(res.data);
-    } catch (e) {
-      setMessage('Bağlantı hatası');
+      const res = await api.get('/')
+      setMessage(res.data)
+    } catch (e: any) {
+      console.error(e)
+      setMessage('Hata: ' + (e.message || 'Bağlantı kurulamadı'))
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center p-8">
@@ -30,7 +31,7 @@ function App() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
