@@ -31,3 +31,29 @@ function App() {
 }
 
 export default App
+import { api } from './services/api';
+import { useState } from 'react';
+
+// ... diğer kodlar
+
+const [message, setMessage] = useState('');
+
+const testBackend = async () => {
+  try {
+    const res = await api.get('/');
+    setMessage(res.data);
+  } catch (e) {
+    setMessage('Bağlantı hatası');
+  }
+};
+
+// return içinde:
+<div className="text-center">
+  <button 
+    onClick={testBackend}
+    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-xl"
+  >
+    Backend Test Et
+  </button>
+  {message && <p className="mt-4 text-2xl font-bold text-green-600">{message}</p>}
+</div>
