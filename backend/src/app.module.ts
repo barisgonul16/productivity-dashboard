@@ -10,17 +10,18 @@ import { AppService } from './app.service';
     TypeOrmModule.forRoot({
       type: 'postgres',
       // Render'da DATABASE_URL varsa onu kullan, yoksa locale bak
-      url: process.env.DATABASE_URL, 
+      url: process.env.DATABASE_URL,
       host: process.env.DATABASE_URL ? undefined : process.env.DATABASE_HOST || 'localhost',
-      port: process.env.DATABASE_URL ? undefined : parseInt(process.env.DATABASE_PORT) || 5432,
+      // DÜZELTİLEN SATIR BURASI: (|| '5432' ekledik)
+      port: process.env.DATABASE_URL ? undefined : parseInt(process.env.DATABASE_PORT || '5432'),
       username: process.env.DATABASE_URL ? undefined : process.env.DATABASE_USERNAME || 'postgres',
       password: process.env.DATABASE_URL ? undefined : process.env.DATABASE_PASSWORD || 'password',
       database: process.env.DATABASE_URL ? undefined : process.env.DATABASE_NAME || 'productivity_db',
       
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // MVP olduğu için true bırakıyoruz (tabloları otomatik oluşturur)
+      synchronize: true, // MVP olduğu için true bırakıyoruz
       
-      // ÖNEMLİ: Render için SSL ayarı
+      // Render için SSL ayarı
       ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
     }),
   ],
