@@ -9,7 +9,7 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
+  password: string; // bcrypt ile hash'lenecek
 
   @Column()
   name: string;

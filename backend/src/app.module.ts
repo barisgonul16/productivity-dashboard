@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AppService } from './app.service';
       // Render için SSL ayarı
       ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
